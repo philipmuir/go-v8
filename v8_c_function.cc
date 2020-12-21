@@ -87,7 +87,7 @@ extern "C" {
     ISOLATE_SCOPE(info.GetIsolate());
     v8::HandleScope handleScope(isolate);
 
-    String id = v8_String_Create(info.Data());
+    String id = v8_String_Create(isolate, info.Data());
     CallerInfo callerInfo = v8_StackTrace_CallerInfo(isolate);
     ValueTuple self = v8_Value_ValueTuple(isolate, info.This());
     ValueTuple holder = v8_Value_ValueTuple(isolate, info.Holder());
