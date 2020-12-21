@@ -5,7 +5,7 @@ extern "C" {
   FunctionTemplatePtr v8_FunctionTemplate_New(ContextPtr pContext, const char* id) {
     VALUE_SCOPE(pContext);
 
-    v8::Local<v8::FunctionTemplate> function = v8::FunctionTemplate::New(isolate, FunctionCallbackHandler, v8::String::NewFromUtf8(isolate, id));
+    v8::Local<v8::FunctionTemplate> function = v8::FunctionTemplate::New(isolate, FunctionCallbackHandler, v8::String::NewFromUtf8(isolate, id).ToLocalChecked());
     return static_cast<FunctionTemplatePtr>(new FunctionTemplate(isolate, function));
   }
 
@@ -32,7 +32,7 @@ extern "C" {
     VALUE_SCOPE(pContext);
 
     v8::Local<v8::FunctionTemplate> function = static_cast<FunctionTemplate*>(pFunction)->Get(isolate);
-    function->SetClassName(v8::String::NewFromUtf8(isolate, name));
+    function->SetClassName(v8::String::NewFromUtf8(isolate, name).ToLocalChecked());
   }
 
   void v8_FunctionTemplate_RemovePrototype(ContextPtr pContext, FunctionTemplatePtr pFunction) {
