@@ -35,11 +35,11 @@ extern "C" {
     function->SetClassName(v8::String::NewFromUtf8(isolate, name));
   }
 
-  void v8_FunctionTemplate_SetHiddenPrototype(ContextPtr pContext, FunctionTemplatePtr pFunction, bool value) {
+  void v8_FunctionTemplate_RemovePrototype(ContextPtr pContext, FunctionTemplatePtr pFunction) {
     VALUE_SCOPE(pContext);
 
     v8::Local<v8::FunctionTemplate> function = static_cast<FunctionTemplate*>(pFunction)->Get(isolate);
-    function->SetHiddenPrototype(value);
+    function->RemovePrototype();
   }
 
   ValuePtr v8_FunctionTemplate_GetFunction(ContextPtr pContext, FunctionTemplatePtr pFunction) {
