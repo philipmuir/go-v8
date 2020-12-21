@@ -161,7 +161,7 @@ func (f *FunctionTemplate) SetName(name string) error {
 	return nil
 }
 
-func (f *FunctionTemplate) SetHiddenPrototype(value bool) error {
+func (f *FunctionTemplate) RemovePrototype() error {
 	if err := f.context.isolate.lock(); err != nil {
 		return err
 	} else {
@@ -171,7 +171,7 @@ func (f *FunctionTemplate) SetHiddenPrototype(value bool) error {
 	f.context.ref()
 	defer f.context.unref()
 
-	C.v8_FunctionTemplate_SetHiddenPrototype(f.context.pointer, f.pointer, C.bool(value))
+	C.v8_FunctionTemplate_RemovePrototype(f.context.pointer, f.pointer)
 	return nil
 }
 
