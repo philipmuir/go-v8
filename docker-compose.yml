@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  app:
+    image: golang:1.13.5
+    container_name: go-v8
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    volumes: # volumes should be avoided in production
+      - .:/go/src/github.com/twitchel/go-v8
