@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   app:
-    image: 358559522285.dkr.ecr.us-west-2.amazonaws.com/base-go:1.13
+    image: golang
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     volumes: # volumes should be avoided in production
