@@ -45,7 +45,8 @@ extern "C" {
   ValuePtr v8_FunctionTemplate_GetFunction(ContextPtr pContext, FunctionTemplatePtr pFunction) {
     VALUE_SCOPE(pContext);
     v8::Local<v8::FunctionTemplate> function = static_cast<FunctionTemplate*>(pFunction)->Get(isolate);
-    return new Value(isolate, function->GetFunction());
+
+    return new Value(isolate, function->GetFunction(context).ToLocalChecked());
   }
 
   ObjectTemplatePtr v8_FunctionTemplate_PrototypeTemplate(ContextPtr pContext, FunctionTemplatePtr pFunction) {
