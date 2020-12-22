@@ -1,5 +1,5 @@
-#include
-#libv8
+include
+libv8
 
 # https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 
