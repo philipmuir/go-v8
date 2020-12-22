@@ -159,7 +159,7 @@ extern FunctionTemplatePtr v8_FunctionTemplate_New(ContextPtr ctx, const char* i
 extern void v8_FunctionTemplate_Release(ContextPtr ctxptr, FunctionTemplatePtr fnptr);
 extern void v8_FunctionTemplate_Inherit(ContextPtr ctxptr, FunctionTemplatePtr fnptr, FunctionTemplatePtr parentptr);
 extern void v8_FunctionTemplate_SetName(ContextPtr pContext, FunctionTemplatePtr pFunction, const char* name);
-extern void v8_FunctionTemplate_SetHiddenPrototype(ContextPtr ctxptr, FunctionTemplatePtr fnptr, bool value);
+extern void v8_FunctionTemplate_RemovePrototype(ContextPtr ctxptr, FunctionTemplatePtr fnptr);
 extern ValuePtr v8_FunctionTemplate_GetFunction(ContextPtr ctx, FunctionTemplatePtr fn);
 extern ObjectTemplatePtr v8_FunctionTemplate_PrototypeTemplate(ContextPtr ctxptr, FunctionTemplatePtr function_ptr);
 extern ObjectTemplatePtr v8_FunctionTemplate_InstanceTemplate(ContextPtr ctxptr, FunctionTemplatePtr function_ptr);

@@ -5,7 +5,7 @@ extern "C" {
   FunctionTemplatePtr v8_FunctionTemplate_New(ContextPtr pContext, const char* id) {
     VALUE_SCOPE(pContext);
 
-    v8::Local<v8::FunctionTemplate> function = v8::FunctionTemplate::New(isolate, FunctionCallbackHandler, v8::String::NewFromUtf8(isolate, id));
+    v8::Local<v8::FunctionTemplate> function = v8::FunctionTemplate::New(isolate, FunctionCallbackHandler, v8::String::NewFromUtf8(isolate, id).ToLocalChecked());
     return static_cast<FunctionTemplatePtr>(new FunctionTemplate(isolate, function));
   }
 
@@ -32,20 +32,21 @@ extern "C" {
     VALUE_SCOPE(pContext);
 
     v8::Local<v8::FunctionTemplate> function = static_cast<FunctionTemplate*>(pFunction)->Get(isolate);
-    function->SetClassName(v8::String::NewFromUtf8(isolate, name));
+    function->SetClassName(v8::String::NewFromUtf8(isolate, name).ToLocalChecked());
   }
 
-  void v8_FunctionTemplate_SetHiddenPrototype(ContextPtr pContext, FunctionTemplatePtr pFunction, bool value) {
+  void v8_FunctionTemplate_RemovePrototype(ContextPtr pContext, FunctionTemplatePtr pFunction) {
     VALUE_SCOPE(pContext);
 
     v8::Local<v8::FunctionTemplate> function = static_cast<FunctionTemplate*>(pFunction)->Get(isolate);
-    function->SetHiddenPrototype(value);
+    function->RemovePrototype();
   }
 
   ValuePtr v8_FunctionTemplate_GetFunction(ContextPtr pContext, FunctionTemplatePtr pFunction) {
     VALUE_SCOPE(pContext);
     v8::Local<v8::FunctionTemplate> function = static_cast<FunctionTemplate*>(pFunction)->Get(isolate);
-    return new Value(isolate, function->GetFunction());
+
+    return new Value(isolate, function->GetFunction(context).ToLocalChecked());
   }
 
   ObjectTemplatePtr v8_FunctionTemplate_PrototypeTemplate(ContextPtr pContext, FunctionTemplatePtr pFunction) {
@@ -63,7 +64,7 @@ extern "C" {
   void v8_ObjectTemplate_SetAccessor(ContextPtr pContext, ObjectTemplatePtr pObject, const char* name, const char* id, bool setter) {
     VALUE_SCOPE(pContext);
     v8::Local<v8::ObjectTemplate> object = static_cast<ObjectTemplate*>(pObject)->Get(isolate);
-    object->SetAccessor(v8::String::NewFromUtf8(isolate, name), GetterCallbackHandler, setter ? SetterCallbackHandler : 0, v8::String::NewFromUtf8(isolate, id), (v8::AccessControl)(v8::ALL_CAN_READ | v8::ALL_CAN_WRITE), v8::PropertyAttribute::None);
+    object->SetAccessor(v8::String::NewFromUtf8(isolate, name).ToLocalChecked(), GetterCallbackHandler, setter ? SetterCallbackHandler : 0, v8::String::NewFromUtf8(isolate, id).ToLocalChecked(), (v8::AccessControl)(v8::ALL_CAN_READ | v8::ALL_CAN_WRITE), v8::PropertyAttribute::None);
   }
 
   void v8_ObjectTemplate_SetInternalFieldCount(ContextPtr pContext, ObjectTemplatePtr pObject, int count) {
@@ -87,7 +88,7 @@ extern "C" {
     ISOLATE_SCOPE(info.GetIsolate());
     v8::HandleScope handleScope(isolate);
 
-    String id = v8_String_Create(info.Data());
+    String id = v8_String_Create(isolate, info.Data());
     CallerInfo callerInfo = v8_StackTrace_CallerInfo(isolate);
     ValueTuple self = v8_Value_ValueTuple(isolate, info.This());
     ValueTuple holder = v8_Value_ValueTuple(isolate, info.Holder());
