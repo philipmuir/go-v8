@@ -35,6 +35,7 @@ typedef v8::Persistent<v8::FunctionTemplate> FunctionTemplate;
 typedef v8::Persistent<v8::ObjectTemplate> ObjectTemplate;
 typedef v8::Persistent<v8::Value> Value;
 typedef v8::Persistent<v8::Private> Private;
+typedef v8::Local<v8::Value> LocalValue;
 
 inline ValueTuple v8_Value_ValueTuple(v8::Isolate* isolate, v8::Local<v8::Value> value);
 inline ValueTuple v8_Value_ValueTuple_Error(v8::Isolate* isolate, const v8::Local<v8::Value>& value);
