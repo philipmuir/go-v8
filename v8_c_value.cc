@@ -345,13 +345,9 @@ extern "C" {
     VALUE_SCOPE(pContext);
 
     v8::Local<v8::Value> value = static_cast<Value*>(pValue)->Get(isolate);
-    v8::Maybe<bool> maybe = value->BooleanValue(context);
+    bool maybe = value->BooleanValue(isolate);
 
-    if (maybe.IsNothing()) {
-      return 0;
-    }
-
-    return maybe.ToChecked() ? 1 : 0;
+    return maybe ? 1 : 0;
   }
 
   ByteArray v8_Value_Bytes(ContextPtr pContext, ValuePtr pValue) {
