@@ -313,7 +313,7 @@ extern "C" {
   String v8_Value_String(ContextPtr pContext, ValuePtr pValue) {
     VALUE_SCOPE(pContext);
     v8::Local<v8::Value> value = static_cast<Value*>(pValue)->Get(isolate);
-    return v8_String_Create(value);
+    return v8_String_Create(isolate, value);
   }
 
   double v8_Value_Float64(ContextPtr pContext, ValuePtr pValue) {
