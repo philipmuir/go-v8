@@ -2,7 +2,7 @@ package v8
 
 // #include "v8_c_bridge.h"
 // #cgo CXXFLAGS: -I${SRCDIR} -I${SRCDIR}/include -g3 -fno-rtti -fpic -std=c++14
-// #cgo LDFLAGS: -pthread -L${SRCDIR}/libv8 -lv8
+// #cgo LDFLAGS: -pthread -L${SRCDIR}/libv8 -lv8_monolith
 import "C"
 
 import (
