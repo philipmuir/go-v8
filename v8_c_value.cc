@@ -175,7 +175,7 @@ extern "C" {
     }
     v8::Local<v8::Object> object = maybeObject->ToObject(context).ToLocalChecked();
 
-    v8::Maybe<bool> result = object->DefineProperty(context, v8::String::NewFromUtf8(isolate, key), propertyDescriptor);
+    v8::Maybe<bool> result = object->DefineProperty(context, v8::String::NewFromUtf8(isolate, key).ToLocalChecked(), propertyDescriptor);
 
     if (result.IsNothing()) {
       return v8_String_Create("Something went wrong: define property returned nothing.");
