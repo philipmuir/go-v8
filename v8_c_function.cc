@@ -125,7 +125,7 @@ extern "C" {
     } else if (result.value == NULL) {
       info.GetReturnValue().Set(v8::Undefined(isolate));
     } else {
-      info.GetReturnValue().Set(*static_cast<Value*>(result.value));
+      info.GetReturnValue().Set(*static_cast<LocalValue*>(result.value));
     }
   }
 
@@ -165,7 +165,7 @@ extern "C" {
     } else if (result.value == NULL) {
       info.GetReturnValue().Set(v8::Undefined(isolate));
     } else {
-      info.GetReturnValue().Set(*static_cast<Value*>(result.value));
+      info.GetReturnValue().Set(*static_cast<LocalValue*>(result.value));
     }
   }
 
