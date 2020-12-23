@@ -384,7 +384,7 @@ extern "C" {
 
     v8::Local<v8::Value> value = static_cast<Value*>(pValue)->Get(isolate);
     if (!value->IsPromise()) {
-      return v8_Value_ValueTuple_Error(isolate v8_String_FromString(isolate, "Not a promise"));
+      return v8_Value_ValueTuple_Error(isolate, v8_String_FromString(isolate, "Not a promise"));
     }
     v8::Local<v8::Promise> promise = v8::Local<v8::Promise>::Cast(value);
 
