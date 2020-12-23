@@ -12,7 +12,7 @@ String StringFromStringView(v8::Isolate* isolate, const v8_inspector::StringView
     s = v8::String::NewFromTwoByte(isolate, view.characters16(), v8::NewStringType::kNormal, view.length());
   }
 
-  return v8_String_Create(s.ToLocalChecked());
+  return v8_String_Create(isolate, s.ToLocalChecked());
 }
 
 
