@@ -36,7 +36,7 @@ extern "C" {
     }
     v8::Local<v8::Object> object = maybeObject->ToObject(context).ToLocalChecked();
 
-    v8::Local<v8::Value> value = object->Get(context, v8::String::NewFromUtf8(isolate, field)).ToLocalChecked();
+    v8::Local<v8::Value> value = object->Get(context, v8::String::NewFromUtf8(isolate, field).ToLocalChecked()).ToLocalChecked();
     return v8_Value_ValueTuple(isolate, value);
   }
 
