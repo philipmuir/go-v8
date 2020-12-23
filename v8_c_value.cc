@@ -91,7 +91,7 @@ extern "C" {
     v8::Local<v8::Object> object = maybeObject->ToObject(context).ToLocalChecked();
 
     v8::Local<v8::Value> newValue = static_cast<Value*>(pNewValue)->Get(isolate);
-    v8::Maybe<bool> result = object->Set(context, v8::String::NewFromUtf8(isolate, field), newValue);
+    v8::Maybe<bool> result = object->Set(context, v8::String::NewFromUtf8(isolate, field).ToLocalChecked(), newValue);
 
     if (result.IsNothing()) {
       return v8_String_Create("Something went wrong: set returned nothing.");
