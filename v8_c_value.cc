@@ -401,7 +401,7 @@ extern "C" {
     ISOLATE_SCOPE(static_cast<v8::Isolate*>(pIsolate));
     v8::HandleScope handleScope(isolate);
 
-    v8::Local<v8::Private> _private = v8::Private::New(isolate, v8::String::NewFromUtf8(isolate, name));
+    v8::Local<v8::Private> _private = v8::Private::New(isolate, v8::String::NewFromUtf8(isolate, name).ToLocalChecked());
     return static_cast<PrivatePtr>(new Private(isolate, _private));
   }
 
