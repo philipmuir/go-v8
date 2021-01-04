@@ -36,7 +36,7 @@ extern "C" {
     }
     v8::Local<v8::Object> object = maybeObject->ToObject(context).ToLocalChecked();
 
-    v8::Local<v8::Value> value = object->Get(context, v8::String::NewFromUtf8(isolate, field)).ToLocalChecked();
+    v8::Local<v8::Value> value = object->Get(context, v8::String::NewFromUtf8(isolate, field).ToLocalChecked()).ToLocalChecked();
     return v8_Value_ValueTuple(isolate, value);
   }
 
@@ -91,7 +91,7 @@ extern "C" {
     v8::Local<v8::Object> object = maybeObject->ToObject(context).ToLocalChecked();
 
     v8::Local<v8::Value> newValue = static_cast<Value*>(pNewValue)->Get(isolate);
-    v8::Maybe<bool> result = object->Set(context, v8::String::NewFromUtf8(isolate, field), newValue);
+    v8::Maybe<bool> result = object->Set(context, v8::String::NewFromUtf8(isolate, field).ToLocalChecked(), newValue);
 
     if (result.IsNothing()) {
       return v8_String_Create("Something went wrong: set returned nothing.");
@@ -175,7 +175,7 @@ extern "C" {
     }
     v8::Local<v8::Object> object = maybeObject->ToObject(context).ToLocalChecked();
 
-    v8::Maybe<bool> result = object->DefineProperty(context, v8::String::NewFromUtf8(isolate, key), propertyDescriptor);
+    v8::Maybe<bool> result = object->DefineProperty(context, v8::String::NewFromUtf8(isolate, key).ToLocalChecked(), propertyDescriptor);
 
     if (result.IsNothing()) {
       return v8_String_Create("Something went wrong: define property returned nothing.");
@@ -313,7 +313,7 @@ extern "C" {
   String v8_Value_String(ContextPtr pContext, ValuePtr pValue) {
     VALUE_SCOPE(pContext);
     v8::Local<v8::Value> value = static_cast<Value*>(pValue)->Get(isolate);
-    return v8_String_Create(value);
+    return v8_String_Create(isolate, value);
   }
 
   double v8_Value_Float64(ContextPtr pContext, ValuePtr pValue) {
@@ -345,13 +345,9 @@ extern "C" {
     VALUE_SCOPE(pContext);
 
     v8::Local<v8::Value> value = static_cast<Value*>(pValue)->Get(isolate);
-    v8::Maybe<bool> maybe = value->BooleanValue(context);
+    bool maybe = value->BooleanValue(isolate);
 
-    if (maybe.IsNothing()) {
-      return 0;
-    }
-
-    return maybe.ToChecked() ? 1 : 0;
+    return maybe ? 1 : 0;
   }
 
   ByteArray v8_Value_Bytes(ContextPtr pContext, ValuePtr pValue) {
@@ -384,7 +380,7 @@ extern "C" {
 
     v8::Local<v8::Value> value = static_cast<Value*>(pValue)->Get(isolate);
     if (!value->IsPromise()) {
-      return v8_Value_ValueTuple_Error(isolate v8_String_FromString(isolate, "Not a promise"));
+      return v8_Value_ValueTuple_Error(isolate, v8_String_FromString(isolate, "Not a promise"));
     }
     v8::Local<v8::Promise> promise = v8::Local<v8::Promise>::Cast(value);
 
@@ -401,7 +397,7 @@ extern "C" {
     ISOLATE_SCOPE(static_cast<v8::Isolate*>(pIsolate));
     v8::HandleScope handleScope(isolate);
 
-    v8::Local<v8::Private> _private = v8::Private::New(isolate, v8::String::NewFromUtf8(isolate, name));
+    v8::Local<v8::Private> _private = v8::Private::New(isolate, v8::String::NewFromUtf8(isolate, name).ToLocalChecked());
     return static_cast<PrivatePtr>(new Private(isolate, _private));
   }
 

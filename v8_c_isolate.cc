@@ -5,8 +5,12 @@ auto allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
 
 extern "C" {
   StartupData v8_CreateSnapshotDataBlob(const char* js) {
-    v8::StartupData data = v8::V8::CreateSnapshotDataBlob(js);
-    return StartupData{data.data, data.raw_size};
+    v8::StartupData* startupData = new v8::StartupData;
+    startupData->data = js;
+    startupData->raw_size = strlen(js);
+
+    v8::V8::SetSnapshotDataBlob(startupData);
+    return StartupData{startupData->data, startupData->raw_size};
   }
 
   IsolatePtr v8_Isolate_New(StartupData startupData) {
