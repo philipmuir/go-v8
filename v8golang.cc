@@ -1,49 +1,49 @@
 #include "v8golang.h"
+#include "libplatform/libplatform.h"
 #include "v8.h"
 
 extern "C" {
+  const char* Version() {
+    return v8::V8::GetVersion();
+  }
 
-void v8_Initialize() {
-//  const char* flags = "--expose_gc";
-//  v8::V8::SetFlagsFromString(flags, strlen(flags));
+  auto allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
 
-  auto platform_ = v8::platform::NewDefaultPlatform();
-  v8::V8::InitializePlatform(platform_.get());
+  void v8_Initialize() {
+  //  const char* flags = "--expose_gc";
+  //  v8::V8::SetFlagsFromString(flags, strlen(flags));
 
-  v8::V8::Initialize();
-  return;
+    auto platform_ = v8::platform::NewDefaultPlatform();
+    v8::V8::InitializePlatform(platform_.get());
+
+    v8::V8::Initialize();
+    return;
+  }
+
+  IsolatePtr v8_Isolate_New(StartupData startupData) {
+    v8::Isolate::CreateParams create_params;
+    create_params.array_buffer_allocator = allocator;
+
+    if (startupData.length > 0 && startupData.data != NULL) {
+      v8::StartupData* data = new v8::StartupData;
+      data->data = startupData.data;
+      data->raw_size = startupData.length;
+      create_params.snapshot_blob = data;
+    }else {
+      // not needed but lets be explicit about this (v8 source code: src/api/api.cc:8524)
+      create_params.snapshot_blob = nullptr;
+    }
+
+    v8::Isolate* isolate_ptr = v8::Isolate::New(create_params);
+    return static_cast<IsolatePtr>(isolate_ptr);
+  }
+
+  void v8_Isolate_Terminate(IsolatePtr isolate_ptr) {
+    v8::Isolate* isolate = static_cast<v8::Isolate*>(isolate_ptr);
+    isolate->TerminateExecution();
+  }
 }
 
-const char* Version() {
-  return v8::V8::GetVersion();
-}
-
-  Version version = {V8_MAJOR_VERSION, V8_MINOR_VERSION, V8_BUILD_NUMBER, V8_PATCH_LEVEL};
-
-}
-
-//  IsolatePtr v8_Isolate_New(StartupData startupData) {
-//    v8::Isolate::CreateParams create_params;
-//    create_params.array_buffer_allocator = allocator;
-//
-//    if (startupData.length > 0 && startupData.data != NULL) {
-//      v8::StartupData* data = new v8::StartupData;
-//      data->data = startupData.data;
-//      data->raw_size = startupData.length;
-//      create_params.snapshot_blob = data;
-//    }else {
-//      // not needed but lets be explicit about this (v8 source code: src/api/api.cc:8524)
-//      create_params.snapshot_blob = nullptr;
-//    }
-//
-//    v8::Isolate* isolate_ptr = v8::Isolate::New(create_params);
-//    return static_cast<IsolatePtr>(isolate_ptr);
-//  }
-//
-//  void v8_Isolate_Terminate(IsolatePtr isolate_ptr) {
-//    v8::Isolate* isolate = static_cast<v8::Isolate*>(isolate_ptr);
-//    isolate->TerminateExecution();
-//  }
 
 //
 //void v8_Isolate_RequestGarbageCollectionForTesting(IsolatePtr pIsolate) {

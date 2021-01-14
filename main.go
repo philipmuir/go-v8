@@ -19,10 +19,11 @@ func main() {
 
 	fmt.Print(Version())
 
-	//ptr := C.v8_Isolate_New(C.StartupData{data: nil, length: 0})
+	ptr := C.v8_Isolate_New(C.StartupData{data: nil, length: 0})
 
-	//C.v8_Isolate_Terminate(ptr)
+	C.v8_Isolate_Terminate(ptr)
 }
+
 func Init() {
 	v8init.Do(func() {
 		C.v8_Initialize()

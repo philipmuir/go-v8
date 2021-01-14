@@ -42,6 +42,8 @@ typedef void* ExternalPtr;
 typedef void* ResolverPtr;
 
 extern void v8_Initialize();
+extern IsolatePtr v8_Isolate_New(StartupData data);
+extern void v8_Isolate_Terminate(IsolatePtr isolate);
 
 extern const char* Version();
 
@@ -49,8 +51,6 @@ extern const char* Version();
 }
 #endif
 
-//extern IsolatePtr v8_Isolate_New(StartupData data);
-//extern void v8_Isolate_Terminate(IsolatePtr isolate);
 
 //extern void v8_Isolate_Release(IsolatePtr isolate);
 //extern void v8_Isolate_RequestGarbageCollectionForTesting(IsolatePtr pIsolate);
