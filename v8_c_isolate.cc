@@ -33,13 +33,13 @@ extern "C" {
     isolate->TerminateExecution();
   }
 
-	void v8_Isolate_RequestGarbageCollectionForTesting(IsolatePtr pIsolate) {
-		ISOLATE_SCOPE(static_cast<v8::Isolate*>(pIsolate));
+  void v8_Isolate_RequestGarbageCollectionForTesting(IsolatePtr pIsolate) {
+    ISOLATE_SCOPE(static_cast<v8::Isolate*>(pIsolate));
 
-		isolate->RequestGarbageCollectionForTesting(v8::Isolate::kFullGarbageCollection);
-	}
+    isolate->RequestGarbageCollectionForTesting(v8::Isolate::kFullGarbageCollection);
+  }
 
-	HeapStatistics v8_Isolate_GetHeapStatistics(IsolatePtr pIsolate) {
+  HeapStatistics v8_Isolate_GetHeapStatistics(IsolatePtr pIsolate) {
     if (pIsolate == NULL) {
       return HeapStatistics{0};
     }
