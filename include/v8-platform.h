@@ -216,43 +216,16 @@ class JobHandle {
    */
   virtual void Cancel() = 0;
 
-  /*
-   * Forces all existing workers to yield ASAP but doesn’t wait for them.
-   * Warning, this is dangerous if the Job's callback is bound to or has access
-   * to state which may be deleted after this call.
-   * TODO(etiennep): Cleanup once implemented by all embedders.
-   */
-  virtual void CancelAndDetach() { Cancel(); }
-
   /**
-   * Returns true if there's any work pending or any worker running.
+   * Returns true if there's no work pending and no worker running.
    */
-  virtual bool IsActive() = 0;
-
-  // TODO(etiennep): Clean up once all overrides are removed.
-  V8_DEPRECATED("Use !IsActive() instead.")
-  virtual bool IsCompleted() { return !IsActive(); }
+  virtual bool IsCompleted() = 0;
 
   /**
    * Returns true if associated with a Job and other methods may be called.
-   * Returns false after Join() or Cancel() was called. This may return true
-   * even if no workers are running and IsCompleted() returns true
+   * Returns false after Join() or Cancel() was called.
    */
-  virtual bool IsValid() = 0;
-
-  // TODO(etiennep): Clean up once all overrides are removed.
-  V8_DEPRECATED("Use IsValid() instead.")
-  virtual bool IsRunning() { return IsValid(); }
-
-  /**
-   * Returns true if job priority can be changed.
-   */
-  virtual bool UpdatePriorityEnabled() const { return false; }
-
-  /**
-   *  Update this Job's priority.
-   */
-  virtual void UpdatePriority(TaskPriority new_priority) {}
+  virtual bool IsRunning() = 0;
 };
 
 /**
@@ -410,13 +383,7 @@ class PageAllocator {
     kReadWrite,
     // TODO(hpayer): Remove this flag. Memory should never be rwx.
     kReadWriteExecute,
-    kReadExecute,
-    // Set this when reserving memory that will later require kReadWriteExecute
-    // permissions. The resulting behavior is platform-specific, currently
-    // this is used to set the MAP_JIT flag on Apple Silicon.
-    // TODO(jkummerow): Remove this when Wasm has a platform-independent
-    // w^x implementation.
-    kNoAccessWillJitLater
+    kReadExecute
   };
 
   /**

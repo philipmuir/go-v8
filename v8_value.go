@@ -1,8 +1,12 @@
 package v8
 
 // #include "v8_c_bridge.h"
-// #cgo CXXFLAGS: -I${SRCDIR} -I${SRCDIR}/include -g3 -fno-rtti -fpic -std=c++14
-// #cgo LDFLAGS: -pthread -L${SRCDIR}/libv8 -lv8_monolith
+// #cgo CXXFLAGS: -fno-rtti -fpic -std=c++14 -DV8_COMPRESS_POINTERS -DV8_31BIT_SMIS_ON_64BIT_ARCH
+// #cgo darwin linux CXXFLAGS: -I${SRCDIR} -I${SRCDIR}/include
+// #cgo LDFLAGS: -pthread -lv8
+// #cgo windows LDFLAGS: -lv8_libplatform
+// #cgo darwin LDFLAGS: -L${SRCDIR}/libv8/darwin_x86_64
+// #cgo linux LDFLAGS: -L${SRCDIR}/libv8/linux_x86_64
 import "C"
 
 import (

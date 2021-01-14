@@ -249,15 +249,6 @@ enum CpuProfilingLoggingMode {
   kEagerLogging,
 };
 
-// Enum for returning profiling status. Once StartProfiling is called,
-// we want to return to clients whether the profiling was able to start
-// correctly, or return a descriptive error.
-enum class CpuProfilingStatus {
-  kStarted,
-  kAlreadyStarted,
-  kErrorTooManyProfilers
-};
-
 /**
  * Optional profiling attributes.
  */
@@ -346,8 +337,7 @@ class V8_EXPORT CpuProfiler {
    * profiles may be collected at once. Attempts to start collecting several
    * profiles with the same title are silently ignored.
    */
-  CpuProfilingStatus StartProfiling(Local<String> title,
-                                    CpuProfilingOptions options);
+  void StartProfiling(Local<String> title, CpuProfilingOptions options);
 
   /**
    * Starts profiling with the same semantics as above, except with expanded
@@ -360,7 +350,7 @@ class V8_EXPORT CpuProfiler {
    * recorded by the profiler. Samples obtained after this limit will be
    * discarded.
    */
-  CpuProfilingStatus StartProfiling(
+  void StartProfiling(
       Local<String> title, CpuProfilingMode mode, bool record_samples = false,
       unsigned max_samples = CpuProfilingOptions::kNoSampleLimit);
   /**
@@ -368,8 +358,7 @@ class V8_EXPORT CpuProfiler {
    * kLeafNodeLineNumbers mode, which was the previous default behavior of the
    * profiler.
    */
-  CpuProfilingStatus StartProfiling(Local<String> title,
-                                    bool record_samples = false);
+  void StartProfiling(Local<String> title, bool record_samples = false);
 
   /**
    * Stops collecting CPU profile with a given title and returns it.
@@ -817,18 +806,6 @@ class V8_EXPORT HeapProfiler {
                                              v8::EmbedderGraph* graph,
                                              void* data);
 
-  /**
-   * Callback function invoked during heap snapshot generation to retrieve
-   * the detachedness state of an object referenced by a TracedReference.
-   *
-   * The callback takes Local<Value> as parameter to allow the embedder to
-   * unpack the TracedReference into a Local and reuse that Local for different
-   * purposes.
-   */
-  using GetDetachednessCallback = EmbedderGraph::Node::Detachedness (*)(
-      v8::Isolate* isolate, const v8::Local<v8::Value>& v8_value,
-      uint16_t class_id, void* data);
-
   /** Returns the number of snapshots taken. */
   int GetSnapshotCount();
 
@@ -978,8 +955,6 @@ class V8_EXPORT HeapProfiler {
                                      void* data);
   void RemoveBuildEmbedderGraphCallback(BuildEmbedderGraphCallback callback,
                                         void* data);
-
-  void SetGetDetachednessCallback(GetDetachednessCallback callback, void* data);
 
   /**
    * Default value of persistent handle class ID. Must not be used to
