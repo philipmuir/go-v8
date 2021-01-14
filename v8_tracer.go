@@ -31,6 +31,7 @@ type TracerType uint8
 
 const (
 	SimpleTracer TracerType = iota
+	NullTracer TracerType = iota
 )
 
 var tracer = itracer(&nullTracer{})
@@ -49,6 +50,8 @@ func StartTracer(t TracerType) {
 	switch t {
 	case SimpleTracer:
 		tracer = newSimpleTracer()
+	case NullTracer:
+		tracer = &nullTracer{}
 	}
 
 	tracer.Start()

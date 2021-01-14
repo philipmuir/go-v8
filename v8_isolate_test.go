@@ -10,7 +10,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	StartTracer(SimpleTracer)
+	StartTracer(NullTracer)
 	Initialize()
 	os.Exit(m.Run())
 }
