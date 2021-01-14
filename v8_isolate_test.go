@@ -23,6 +23,13 @@ func DumpTracerForBenchmark(b *testing.B) {
 	b.Logf("\n%s", string(buf.Bytes()))
 }
 
+func TestIsolateCreateAndTerminate(t *testing.T) {
+
+	i := NewIsolate()
+
+	i.Terminate()
+}
+
 func TestIsolateCreate(t *testing.T) {
 	i := NewIsolate()
 	if c, err := i.NewContext(); err != nil {
