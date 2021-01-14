@@ -17,7 +17,7 @@ var v8init sync.Once
 func main() {
 	Init()
 
-	fmt.Print(Version())
+	fmt.Println(Version())
 
 	ptr := C.v8_Isolate_New(C.StartupData{data: nil, length: 0})
 
